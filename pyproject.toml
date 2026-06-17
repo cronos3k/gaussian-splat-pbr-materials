@@ -9,7 +9,7 @@ description = "Recover PBR material atlases from Gaussian splat, scan, and proxy
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "AGPL-3.0-or-later" }
-authors = [{ name = "Gregor Koch" }]
+authors = [{ name = "Gregor Hubert Max Koch" }]
 keywords = ["pbr", "gaussian-splatting", "photogrammetry", "texture", "uv", "material-atlas"]
 dependencies = [
     "pillow>=9.0",

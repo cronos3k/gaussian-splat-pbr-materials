@@ -3,7 +3,7 @@
 **A screen-space intrinsic decomposition and UV-voting pipeline for Gaussian splats, scans, and extracted meshes**
 
 **Date:** 2026-06-17  
-**Author:** Gregor Koch  
+**Author:** Gregor Hubert Max Koch  
 **Prototype:** `F:\pbr-from-pixelart\pbr_surface.py` and `C:\Users\gregor\Documents\CubeBauhausOnline\tools\intrinsic_ab_test.py`  
 **Interactive demo:** <http://127.0.0.1:7862>
 

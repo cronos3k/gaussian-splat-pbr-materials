@@ -2,7 +2,7 @@
 
 Restoring renderer-native PBR material layers from photoreal capture primitives such as Gaussian splats, scanned meshes, and extracted proxy meshes.
 
-**Author:** Gregor Koch  
+**Author:** Gregor Hubert Max Koch  
 **Publication paper:** [HTML](paper/gaussian_splat_pbr_publication.html) | [PDF](paper/gaussian_splat_pbr_publication.pdf)  
 **Development paper:** [HTML](paper/gaussian_splat_pbr_paper.html) | [PDF](paper/gaussian_splat_pbr_paper.pdf)
 

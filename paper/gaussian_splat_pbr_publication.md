@@ -1,6 +1,6 @@
 # UV-Guided Recovery of PBR Material Atlases from Photoreal Capture Primitives
 
-**Gregor Koch**  
+**Gregor Hubert Max Koch**  
 Independent Researcher  
 2026-06-17
 
@@ -192,7 +192,7 @@ The code is released under the GNU Affero General Public License v3.0 or later.
 
 ## Suggested Citation
 
-Koch, G. (2026). *UV-Guided Recovery of PBR Material Atlases from Photoreal Capture Primitives*. Preprint.
+Koch, Gregor Hubert Max. (2026). *UV-Guided Recovery of PBR Material Atlases from Photoreal Capture Primitives*. Preprint.
 
 ## References
 
@@ -204,4 +204,4 @@ Koch, G. (2026). *UV-Guided Recovery of PBR Material Atlases from Photoreal Capt
 6. Kocsis, P., Sitzmann, V., and Niessner, M. **Intrinsic Image Diffusion for Indoor Single-view Material Estimation.** CVPR 2024. <https://arxiv.org/abs/2312.12274>
 7. Kirillov, A., et al. **Segment Anything.** ICCV 2023. <https://arxiv.org/abs/2304.02643>
 8. Downs, L., et al. **Google Scanned Objects: A High-Quality Dataset of 3D Scanned Household Items.** ICRA 2022. <https://arxiv.org/abs/2204.11918>
-9. Koch, G. **Gaussian Splat PBR Materials.** <https://github.com/cronos3k/gaussian-splat-pbr-materials>
+9. Koch, Gregor Hubert Max. **Gaussian Splat PBR Materials.** <https://github.com/cronos3k/gaussian-splat-pbr-materials>

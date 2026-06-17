@@ -1,6 +1,6 @@
 # License Notice
 
-Copyright (C) 2026 Gregor Koch
+Copyright (C) 2026 Gregor Hubert Max Koch
 
 This project is licensed under the GNU Affero General Public License, version 3
 or any later version published by the Free Software Foundation.

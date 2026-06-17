@@ -12,7 +12,7 @@ UV-Guided Recovery of PBR Material Atlases from Photoreal Capture Primitives
 
 ## Author
 
-Gregor Koch
+Gregor Hubert Max Koch
 
 ## Abstract
 
