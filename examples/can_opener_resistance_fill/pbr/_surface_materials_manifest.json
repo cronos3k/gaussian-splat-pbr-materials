@@ -1,0 +1,18 @@
+{
+ "source_baked_albedo.png": {
+  "hash": "36d52165a25262c7:894abf332885f593:18a066d388e99ccf:da77a1206da63c28",
+  "result": {
+   "palette": {
+    "12": "metal_steel",
+    "25": "plastic",
+    "31": "unknown"
+   },
+   "material": "metal_steel",
+   "pattern": "noise",
+   "grain": "none",
+   "relief": "medium",
+   "edges": "recessed",
+   "features": []
+  }
+ }
+}

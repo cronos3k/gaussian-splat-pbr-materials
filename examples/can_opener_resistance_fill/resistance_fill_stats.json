@@ -1,0 +1,27 @@
+{
+  "iterations": 96,
+  "resistance": 14.0,
+  "target_mask_pixels": 412473,
+  "target_mask_percent": 39.3365,
+  "raw_direct_mask_pixels": 28377,
+  "raw_direct_mask_percent": 2.7062,
+  "raw_tagged_pixels": 21268,
+  "raw_tagged_percent": 2.0283,
+  "filled_mask_pixels": 376306,
+  "filled_mask_percent": 35.8873,
+  "filled_target_completion_percent": 91.2317,
+  "filled_tagged_pixels": 365330,
+  "filled_tagged_percent": 34.8406,
+  "filled_tagged_within_mask_percent": 97.0832,
+  "raw_material_pixels": {
+    "metal_steel": 14973,
+    "plastic": 6008,
+    "unknown": 287
+  },
+  "filled_material_pixels": {
+    "metal_steel": 266033,
+    "plastic": 98414,
+    "unknown": 883
+  },
+  "output_dir": "C:\\Users\\gregor\\Documents\\CubeBauhausOnline\\artifacts\\multi-material-validation\\runs\\can_opener\\multiview32\\source-materials-qwen-fill96-targeted"
+}
