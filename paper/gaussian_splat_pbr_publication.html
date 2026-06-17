@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UV-Guided Recovery of PBR Material Atlases from Photoreal Capture Primitives</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #151a20;
+      --muted: #56616d;
+      --line: #d9dee5;
+      --soft: #f4f7f8;
+      --accent: #244f7a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #fff;
+      color: var(--ink);
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.52;
+      font-size: 14.5px;
+    }
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 44px 44px 72px;
+    }
+    header {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 22px;
+      margin-bottom: 26px;
+      text-align: center;
+    }
+    h1 {
+      margin: 0 0 14px;
+      font-size: 36px;
+      line-height: 1.12;
+      letter-spacing: 0;
+      color: #111820;
+    }
+    .author { font-size: 18px; margin: 8px 0 2px; }
+    .affil, .date { color: var(--muted); margin: 0; }
+    h2 {
+      margin: 34px 0 10px;
+      font-size: 22px;
+      line-height: 1.18;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 4px;
+    }
+    h3 {
+      margin: 24px 0 8px;
+      font-size: 17px;
+      line-height: 1.25;
+    }
+    p { margin: 0 0 12px; }
+    a { color: var(--accent); }
+    .abstract {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 16px 18px;
+      margin: 20px 0;
+      text-align: left;
+    }
+    .keywords {
+      color: var(--muted);
+      font-size: 13.5px;
+      text-align: left;
+      margin-top: 10px;
+    }
+    figure {
+      margin: 20px 0 24px;
+      break-inside: avoid;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+    figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    figcaption {
+      border-top: 1px solid var(--line);
+      padding: 8px 11px;
+      color: var(--muted);
+      font-size: 12.8px;
+      background: #fbfcfd;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 22px;
+      break-inside: avoid;
+      font-size: 13.2px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 7px 8px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: #edf2f6;
+      font-weight: 650;
+    }
+    code, pre {
+      font-family: Consolas, "Cascadia Mono", monospace;
+      background: #f1f3f5;
+      border-radius: 4px;
+    }
+    code { padding: 1px 4px; }
+    pre {
+      padding: 10px 12px;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+    }
+    blockquote {
+      margin: 14px 0;
+      padding: 10px 14px;
+      border-left: 4px solid var(--accent);
+      background: #f7fafb;
+      color: #2e3944;
+    }
+    ol, ul { padding-left: 24px; }
+    li { margin-bottom: 5px; }
+    .refs li { margin-bottom: 8px; }
+    .page-break { break-before: page; }
+    @page {
+      size: A4;
+      margin: 14mm 14mm 16mm;
+    }
+    @media print {
+      body { font-size: 10.5pt; }
+      main { max-width: none; padding: 0; }
+      h1 { font-size: 25pt; }
+      h2 { font-size: 15pt; }
+      h3 { font-size: 12pt; }
+      figure, table { break-inside: avoid; }
+      a { color: #111820; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>UV-Guided Recovery of PBR Material Atlases from Photoreal Capture Primitives</h1>
+    <p class="author">Gregor Koch</p>
+    <p class="affil">Independent Researcher</p>
+    <p class="date">Preprint, 2026-06-17</p>
+  </header>
+
+  <section class="abstract">
+    <p><strong>Abstract.</strong> Photoreal capture methods such as 3D Gaussian splatting and photogrammetry can reproduce scenes with high visual fidelity, yet their appearance representation is usually not a renderer-native material model. Captured colors often mix base color, shadows, highlights, view-dependent response, and exposure. As a result, assets that look plausible under their original capture illumination can fail when relit in physically based renderers. This paper presents a prototype pipeline for converting paired RGB and UV-coordinate screen captures into physically based rendering (PBR) texture atlases. The method renders overlapping RGB/UV views, applies intrinsic-image decomposition to estimate de-lit appearance, segments and semantically tags material regions from the original RGB observations, votes those observations into UV texture space, and completes sparse atlas regions using a UV-occupancy-constrained resistance fill. A validation run on a multi-material scanned can opener shows that direct 32-view UV voting is more reliable than a single view but remains sparse: direct atlas coverage is 2.71%, with 2.03% tagged material coverage. Applying a 96-pixel resistance fill constrained by an inferred UV occupancy mask expands usable atlas coverage to 35.89% and tagged material coverage to 34.84%, while avoiding empty atlas padding. The result is not a calibrated inverse-rendering solution, but it demonstrates a practical bridge from capture-native appearance to conventional albedo, material-label, normal, height, and occlusion/roughness/metallicity maps.</p>
+    <p class="keywords"><strong>Keywords:</strong> Gaussian splatting; photogrammetry; physically based rendering; intrinsic images; UV atlas baking; material segmentation; neural rendering; texture synthesis.</p>
+  </section>
+
+  <h2>1. Introduction</h2>
+  <p>Photoreal capture primitives are increasingly used as production assets. 3D Gaussian splatting provides real-time novel-view rendering quality from optimized anisotropic Gaussian primitives [1], and photogrammetry pipelines can produce textured meshes from dense image observations. These representations are highly effective when the objective is to reproduce the captured scene under the captured lighting. They are less effective when the asset must become a reusable object in a physically based renderer.</p>
+  <p>PBR workflows expect texture layers with distinct semantics: base color, normal, roughness, metallicity, ambient occlusion, height, and sometimes explicit material identifiers. A captured radiance texture does not provide those layers. It embeds illumination, shadows, specular response, camera exposure, and sometimes view-dependent effects. If such an asset is placed into a new scene with new lighting, the renderer has too little material information to respond plausibly.</p>
+  <p>This paper asks whether a renderer-facing material representation can be recovered from screen-space observations while preserving texture-space correspondence. The proposed answer is a UV-guided capture and baking pipeline. Every image-space operation is paired with an aligned UV-coordinate pass, so predictions produced in screen space can be written back into a conventional texture atlas.</p>
+  <p>The contribution is not a new foundation model. It is a practical integration pattern: render overlapping RGB and UV-coordinate captures, estimate de-lit albedo, segment and tag material regions from original RGB views, vote those observations into UV space, complete sparse atlas samples with a resistance-weighted UV fill, and generate renderer-consumable PBR maps.</p>
+
+  <h2>2. Related Work</h2>
+  <p>3D Gaussian Splatting represents scenes with optimized anisotropic 3D Gaussians and has become a strong real-time view-synthesis representation [1]. Its optimized appearance is not, by itself, a PBR material description. This creates a gap between capture-native radiance and renderer-native material layers.</p>
+  <p>Physically based shading workflows commonly use BRDF models and authored texture channels to control base color, normals, roughness, metallicity, and occlusion. The Disney principled shading model is a practical reference point for artist-facing PBR material parameters [2].</p>
+  <p>Intrinsic image decomposition attempts to separate material reflectance from illumination. Marigold adapts diffusion-based generative priors to image-analysis tasks and includes intrinsic-image decomposition checkpoints [3, 4]. IntrinsicAnything and Intrinsic Image Diffusion are related approaches for inverse rendering or single-view material estimation [5, 6]. These systems can produce useful albedo candidates, but their outputs must be grounded in texture space before they are useful as renderer assets.</p>
+  <p>Segmentation foundation models such as Segment Anything provide strong region proposals [7]. In this prototype, connected color-region segmentation is sufficient for controlled smoke tests, while SAM/SAM2-style masks remain an important path for harder objects with broad reflective or glossy areas. The validation examples use Google Scanned Objects, a public collection of scanned household items [8].</p>
+
+  <h2>3. Method</h2>
+  <p>The method treats UV correspondence as the central contract. Screen-space models are allowed to operate on ordinary images, but their predictions are only accepted if they can be projected through an aligned UV-coordinate pass.</p>
+
+  <figure>
+    <img src="figures/figure_01_pipeline.png" alt="Pipeline overview">
+    <figcaption><strong>Figure 1.</strong> Pipeline overview. RGB views provide visual evidence; UV-coordinate views preserve the mapping back into renderer-native texture space.</figcaption>
+  </figure>
+
+  <table>
+    <thead>
+      <tr><th>Stage</th><th>Input</th><th>Output</th><th>Purpose</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Paired capture</td><td>Mesh, scan, or splat-derived proxy</td><td>RGB image and UV-coordinate image</td><td>Preserve image-space appearance and texture-space address.</td></tr>
+      <tr><td>Intrinsic decomposition</td><td>RGB capture</td><td>De-lit albedo candidate</td><td>Reduce lighting contamination in base color.</td></tr>
+      <tr><td>Region segmentation</td><td>Original RGB capture</td><td>Material-relevant masks</td><td>Preserve semantic color and shape cues.</td></tr>
+      <tr><td>Material tagging</td><td>RGB region crops</td><td>Semantic material labels</td><td>Estimate material priors such as plastic or steel.</td></tr>
+      <tr><td>UV vote</td><td>Albedo, material labels, UV pass</td><td>Sparse UV albedo and material atlas</td><td>Write screen-space evidence into texture space.</td></tr>
+      <tr><td>UV resistance fill</td><td>Sparse atlas and UV occupancy mask</td><td>Completed atlas domain</td><td>Fill voids without crossing strong texture boundaries or empty padding.</td></tr>
+      <tr><td>PBR synthesis</td><td>Completed albedo and labels</td><td>Normal, height, ORM</td><td>Produce renderer-facing maps.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3.1 Paired RGB and UV Capture</h3>
+  <p>For each camera view, two aligned images are rendered: a conventional RGB image and a UV-coordinate image. The UV image encodes where each visible screen pixel lands in atlas space. This pass is the mechanism that turns image-space predictions into texture-space data.</p>
+  <p>The UV-coordinate image is not treated as an appearance image and is not semantically tagged by the material model. Segmentation and material classification operate on RGB or intrinsic/de-lit RGB observations. The resulting screen-space masks are then projected through the UV-coordinate image into atlas space. In other words, the UV page is the transfer function, not the material evidence.</p>
+  <figure>
+    <img src="figures/figure_03_uv_capture_projection.png" alt="RGB and UV capture pair">
+    <figcaption><strong>Figure 2.</strong> A rendered RGB capture and an aligned UV pass. The UV pass allows image predictions to be projected into the atlas.</figcaption>
+  </figure>
+
+  <h3>3.2 Split-Source Material Tagging</h3>
+  <p>Intrinsic decomposition can improve albedo quality, but it can also remove visual cues needed for semantic material identification. In an early multi-material scissors test, tagging from de-lit albedo weakened the red-handle cue and collapsed parts of the map toward generic plastic. The corrected pipeline uses original RGB captures for segmentation and material tagging, while using intrinsic decomposition only for albedo values.</p>
+  <figure>
+    <img src="figures/figure_07_split_source_tagging.png" alt="Split-source material tagging">
+    <figcaption><strong>Figure 3.</strong> Split-source tagging. Material labels are inferred from original RGB regions; de-lit albedo is used for texture values.</figcaption>
+  </figure>
+
+  <h3>3.3 Multiview Material Voting</h3>
+  <p>A single view is not sufficient for material correctness. It is front-view biased, omits occluded materials, and produces sparse atlas coverage. The prototype therefore renders a generated <code>sphere32</code> capture set: 32 overlapping RGB/UV capture pairs distributed around the asset.</p>
+  <p>For every valid screen pixel, the UV pass identifies the atlas texel to update. Color samples accumulate into an averaged albedo atlas. Material labels accumulate into integer vote maps, one per material class. The final material map chooses the material with the strongest vote at each texel.</p>
+  <figure>
+    <img src="figures/figure_08_multiview_voting.png" alt="Multiview material voting">
+    <figcaption><strong>Figure 4.</strong> Single-view material labels are sparse and biased. The 32-view capture set contributes repeated observations to the same UV atlas.</figcaption>
+  </figure>
+
+  <h3>3.4 UV-Space Resistance Fill</h3>
+  <p>Even 32 overlapping views remain sparse because the screen-space raster samples only a small fraction of a high-resolution atlas. Naive dilation can fill holes, but it can also spread into empty atlas padding or cross material boundaries. The implemented completion step uses a UV-occupancy-constrained resistance fill.</p>
+  <p>Let <code>M</code> be a target UV occupancy mask and <code>G</code> a provisional guide image produced from the sparse albedo. A missing texel <code>p</code> inside <code>M</code> receives contributions from neighboring valid texels <code>q</code> with weight:</p>
+  <pre><code>w(p, q) = exp(-r * ||G(p) - G(q)||)</code></pre>
+  <p>where <code>r</code> is a resistance parameter. This permits propagation through smooth texture neighborhoods while reducing propagation across strong color or material-edge changes. The same guide is used to expand integer material labels, so labels follow compatible texture neighborhoods instead of simple nearest-neighbor padding.</p>
+  <p>For scanned meshes, the UV occupancy mask can often be inferred from non-empty source texture pixels. For splat-derived meshes, it should be rasterized directly from extracted UV triangles.</p>
+  <figure>
+    <img src="figures/figure_09_uv_resistance_fill.png" alt="UV-space resistance fill">
+    <figcaption><strong>Figure 5.</strong> UV-space resistance fill on the 32-view can-opener run. Sparse votes are expanded inside the inferred UV occupancy domain.</figcaption>
+  </figure>
+
+  <h2>4. Experiments</h2>
+  <p>The prototype was evaluated as an engineering smoke test rather than a benchmark. The goal was to test whether a complete RGB-to-UV-to-PBR path could be run end-to-end on assets with visibly divergent materials.</p>
+
+  <h3>4.1 Intrinsic Backend Smoke Test</h3>
+  <p>An initial towel scan was used to compare intrinsic/de-lighting backends. Marigold Appearance was selected as the practical default because it preserved texture structure while producing a useful de-lit albedo candidate.</p>
+  <table>
+    <thead>
+      <tr><th>Backend</th><th>Produced channels</th><th>Runtime</th><th>Mean RGB delta</th><th>Observation</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Identity baseline</td><td>Albedo copy, grayscale shading</td><td>0.1 s</td><td>0.000</td><td>Control with no de-lighting.</td></tr>
+      <tr><td>Marigold Lighting</td><td>Albedo, shading, residual</td><td>725.3 s</td><td>0.043</td><td>Strong lighting separation, but suppressed woven detail.</td></tr>
+      <tr><td>Marigold Appearance</td><td>Albedo, roughness, metallicity</td><td>423.4 s</td><td>0.159</td><td>Best default in this smoke test.</td></tr>
+      <tr><td>IntrinsicAnything</td><td>Albedo, specular</td><td>56.0 s</td><td>0.548</td><td>Fast, but lifted background and compressed contrast.</td></tr>
+      <tr><td>Intrinsic Image Diffusion</td><td>Albedo, roughness, metal</td><td>564.6 s</td><td>0.297</td><td>Successful, with gray/brown relighting bias.</td></tr>
+    </tbody>
+  </table>
+  <figure>
+    <img src="figures/figure_02_ablation_grid.png" alt="Intrinsic backend comparison">
+    <figcaption><strong>Figure 6.</strong> Intrinsic backend comparison and downstream atlas outputs.</figcaption>
+  </figure>
+
+  <h3>4.2 Multi-Material Objects</h3>
+  <p>The towel object was not a meaningful material-divergence test, so the pipeline was repeated on scanned household objects with visible combinations such as plastic and steel.</p>
+  <figure>
+    <img src="figures/figure_06_multimaterial_examples.png" alt="Multi-material validation examples">
+    <figcaption><strong>Figure 7.</strong> Multi-material validation examples. These runs revealed that single-view coverage and labeling are not sufficient.</figcaption>
+  </figure>
+  <table>
+    <thead>
+      <tr><th>Asset</th><th>Expected material contrast</th><th>RGB-derived segment labels</th><th>Vision calls</th><th>Fallbacks</th><th>Direct atlas coverage</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Red scissors</td><td>Plastic handles, steel blades</td><td><code>plastic</code> 12, <code>metal_steel</code> 8</td><td>21</td><td>0</td><td>0.83%</td></tr>
+      <tr><td>Cushion-grip screwdriver</td><td>Plastic grip, steel shaft</td><td><code>plastic</code> 20, <code>metal_steel</code> 12</td><td>33</td><td>0</td><td>0.47%</td></tr>
+      <tr><td>Snap-lock can opener</td><td>Black plastic/rubber, steel cutter</td><td><code>plastic</code> 7, <code>metal_steel</code> 12</td><td>20</td><td>0</td><td>0.91%</td></tr>
+    </tbody>
+  </table>
+
+  <h3>4.3 Can-Opener Multiview Completion</h3>
+  <p>The most complete run used a snap-lock can opener with black plastic/rubber and steel parts. A single front view produced a material map dominated by the visible handle. The <code>sphere32</code> pass shifted the vote toward the steel regions visible from other views, but direct UV coverage remained sparse.</p>
+  <table>
+    <thead>
+      <tr><th>Capture protocol</th><th>Capture pairs</th><th>Region calls</th><th>Fallbacks</th><th>Direct atlas coverage</th><th>Tagged atlas coverage</th><th>Main issue</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Single front view</td><td>1</td><td>20</td><td>0</td><td>0.91%</td><td>0.91%</td><td>Front-view material bias.</td></tr>
+      <tr><td><code>sphere32</code> multiview</td><td>32</td><td>384</td><td>0</td><td>2.71%</td><td>2.03%</td><td>Better vote, still sparse.</td></tr>
+    </tbody>
+  </table>
+  <p>The inferred UV occupancy target covered 39.34% of the atlas. A 96-pixel resistance fill covered 35.89% of the atlas, corresponding to 91.23% of that target, and expanded tagged material coverage to 34.84%.</p>
+  <table>
+    <thead>
+      <tr><th>UV completion stage</th><th>Atlas coverage</th><th>Tagged atlas coverage</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Direct <code>sphere32</code> samples</td><td>2.71%</td><td>2.03%</td><td>Trusted but too sparse for renderer export.</td></tr>
+      <tr><td>UV occupancy target</td><td>39.34%</td><td>n/a</td><td>Estimated island domain from the scan texture.</td></tr>
+      <tr><td>96px resistance fill</td><td>35.89%</td><td>34.84%</td><td>Covers 91.23% of target while avoiding empty atlas padding.</td></tr>
+    </tbody>
+  </table>
+  <p>The filled material map contained 266,033 <code>metal_steel</code>, 98,414 <code>plastic</code>, and 883 <code>unknown</code> pixels.</p>
+
+  <h2>5. Discussion</h2>
+  <p>The useful result is architectural: screen-space analysis can be inserted into a renderer pipeline if UV correspondence is captured alongside RGB appearance. This allows intrinsic predictions, segmentation masks, and material labels to become ordinary texture atlases rather than remaining image-space annotations.</p>
+  <p>The method also clarifies why a naive one-image approach is inadequate. Material labels require multiview evidence; de-lit albedo and material semantics should come from different sources; and UV completion must be constrained by the actual atlas domain. The resistance fill is not a substitute for ground-truth texture reconstruction, but it is a practical step between sparse trusted samples and usable renderer inputs.</p>
+  <p>The approach is relevant to Gaussian splat workflows because splats are compelling capture primitives but awkward as relightable asset primitives. If a splat can be rendered with a coordinate pass, converted to a proxy mesh, or sampled into a textured surface, the same UV-guided material recovery pattern can be applied.</p>
+
+  <h2>6. Limitations</h2>
+  <p>This prototype should not be interpreted as a physically calibrated inverse-rendering method. It has several limitations:</p>
+  <ol>
+    <li>The validation set is small and should be expanded into a benchmark with ground-truth or human-reviewed material labels.</li>
+    <li>The generated roughness, metallicity, height, and normal maps are plausible renderer inputs, not measured physical properties.</li>
+    <li>The material tagger can fail on ambiguous regions, glossy surfaces, small parts, or mixed-material crops.</li>
+    <li>Intrinsic decomposition can remove material cues or preserve lighting artifacts depending on object and illumination.</li>
+    <li>The UV resistance fill depends on a good UV occupancy mask; splat-derived meshes need reliable UV triangle rasterization.</li>
+    <li>The current results test atlas generation, not final relighting quality under controlled lights.</li>
+    <li>The validated run used connected color-region segmentation plus VLM tagging. Diffusion/SAM-style masking is supported as a direction for harder scenes, but it was not the measured configuration reported here.</li>
+  </ol>
+
+  <h2>7. Conclusion</h2>
+  <p>This paper presents a practical prototype for recovering renderer-native PBR material atlases from photoreal capture primitives. The central engineering move is simple: capture UV correspondence alongside RGB appearance, then project image-space analysis back into texture space. With overlapping RGB/UV captures, intrinsic de-lighting, split-source material tagging, multiview UV voting, and UV-occupancy-constrained resistance fill, a capture-native representation can be converted into conventional albedo, material-label, normal, height, and ORM maps.</p>
+  <p>The next step is controlled relighting evaluation on real Gaussian-splat scenes and splat-derived meshes, with UV occupancy rasterized from extracted geometry rather than inferred from existing scan textures.</p>
+
+  <h2>Data and Code Availability</h2>
+  <p>The implementation, paper figures, and a derived can-opener validation example are available at <a href="https://github.com/cronos3k/gaussian-splat-pbr-materials">https://github.com/cronos3k/gaussian-splat-pbr-materials</a>. The code is released under the GNU Affero General Public License v3.0 or later.</p>
+
+  <h2>Suggested Citation</h2>
+  <p>Koch, G. (2026). <em>UV-Guided Recovery of PBR Material Atlases from Photoreal Capture Primitives</em>. Preprint.</p>
+
+  <h2>References</h2>
+  <ol class="refs">
+    <li>Kerbl, B., Kopanas, G., Leimkuehler, T., and Drettakis, G. <strong>3D Gaussian Splatting for Real-Time Radiance Field Rendering.</strong> ACM Transactions on Graphics, 2023. <a href="https://arxiv.org/abs/2308.04079">https://arxiv.org/abs/2308.04079</a></li>
+    <li>Burley, B. <strong>Physically-Based Shading at Disney.</strong> SIGGRAPH Course Notes, 2012. <a href="https://disneyanimation.com/publications/physically-based-shading-at-disney/">Publication page</a></li>
+    <li>Ke, B., et al. <strong>Marigold: Affordable Adaptation of Diffusion-Based Image Generators for Image Analysis.</strong> <a href="https://github.com/prs-eth/marigold">https://github.com/prs-eth/marigold</a></li>
+    <li><strong>Marigold IID Appearance v1-1 Model Card.</strong> Hugging Face. <a href="https://huggingface.co/prs-eth/marigold-iid-appearance-v1-1">Model card</a></li>
+    <li>ZJU3DV. <strong>IntrinsicAnything: Learning Diffusion Priors for Inverse Rendering Under Unknown Illumination.</strong> <a href="https://github.com/zju3dv/IntrinsicAnything">https://github.com/zju3dv/IntrinsicAnything</a></li>
+    <li>Kocsis, P., Sitzmann, V., and Niessner, M. <strong>Intrinsic Image Diffusion for Indoor Single-view Material Estimation.</strong> CVPR 2024. <a href="https://arxiv.org/abs/2312.12274">https://arxiv.org/abs/2312.12274</a></li>
+    <li>Kirillov, A., et al. <strong>Segment Anything.</strong> ICCV 2023. <a href="https://arxiv.org/abs/2304.02643">https://arxiv.org/abs/2304.02643</a></li>
+    <li>Downs, L., et al. <strong>Google Scanned Objects: A High-Quality Dataset of 3D Scanned Household Items.</strong> ICRA 2022. <a href="https://arxiv.org/abs/2204.11918">https://arxiv.org/abs/2204.11918</a></li>
+    <li>Koch, G. <strong>Gaussian Splat PBR Materials.</strong> <a href="https://github.com/cronos3k/gaussian-splat-pbr-materials">https://github.com/cronos3k/gaussian-splat-pbr-materials</a></li>
+  </ol>
+</main>
+</body>
+</html>
