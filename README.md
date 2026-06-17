@@ -183,4 +183,10 @@ See the [paper](paper/gaussian_splat_pbr_paper.md) for references covering 3D Ga
 
 ## License
 
-MIT
+GNU Affero General Public License v3.0 or later (`AGPL-3.0-or-later`).
+
+The intent of this license choice is strong copyleft. If a third party modifies,
+redistributes, or runs this project as a network-accessible service, the
+corresponding source code for the covered work and its modifications must remain
+available under the same license. See [`LICENSE`](LICENSE) and
+[`LICENSE-NOTICE.md`](LICENSE-NOTICE.md).

@@ -1,3 +1,5 @@
+# Copyright (C) 2026 Gregor Koch
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """
 sn_backend.py -- optional StableNormal diffusion normal-map backend.
 
